@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FairwayIQ – Practice Smarter</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-dark: #0F6E56; --green-light: #E1F5EE; --green-text: #085041;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --gray-text: #444441; --gray-muted: #888780; --gray-subtle: #F1EFE8;
+    --text: #2C2C2A; --white: #ffffff; --border: #D3D1C7;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; color: var(--text); background: var(--white); }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px; border-bottom: 0.5px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; color: var(--text); text-decoration: none; }
+  .logo-mark { width: 30px; height: 30px; background: var(--green); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .logo-mark svg { width: 18px; height: 18px; fill: none; stroke: white; stroke-width: 2; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a { font-size: 14px; color: var(--gray-muted); text-decoration: none; }
+  .nav-links a:hover { color: var(--text); }
+  .btn-nav { background: var(--green); color: white; padding: 8px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; text-decoration: none; }
+  .btn-nav:hover { background: var(--green-dark); color: white !important; }
+
+  /* HERO */
+  .hero { max-width: 960px; margin: 0 auto; padding: 80px 40px 60px; text-align: center; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green-dark); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; margin-bottom: 28px; }
+  .badge-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+  .hero h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 20px; letter-spacing: -0.5px; }
+  .hero h1 span { color: var(--green); }
+  .hero p { font-size: 18px; color: var(--gray-muted); max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+  .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .btn-primary { background: var(--green); color: white; padding: 13px 28px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-secondary { background: transparent; color: var(--text); padding: 13px 28px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; text-decoration: none; border: 1px solid var(--border); display: inline-block; }
+  .btn-secondary:hover { background: var(--gray-subtle); }
+
+  /* SOCIAL PROOF STRIP */
+  .proof { background: var(--gray-subtle); padding: 16px 40px; }
+  .proof-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; }
+  .proof-stat { text-align: center; }
+  .proof-stat strong { display: block; font-size: 22px; font-weight: 700; color: var(--text); }
+  .proof-stat span { font-size: 12px; color: var(--gray-muted); }
+  .proof-div { width: 1px; height: 32px; background: var(--border); }
+
+  /* SECTIONS */
+  .section { max-width: 960px; margin: 0 auto; padding: 72px 40px; }
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; color: var(--green); text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-size: clamp(24px, 3vw, 34px); font-weight: 700; line-height: 1.25; color: var(--text); margin-bottom: 16px; letter-spacing: -0.3px; }
+  .section-sub { font-size: 16px; color: var(--gray-muted); max-width: 520px; line-height: 1.7; margin-bottom: 40px; }
+
+  /* PROBLEM CARDS */
+  .problems { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .problem-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .problem-icon { width: 36px; height: 36px; background: var(--amber-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .problem-icon svg { width: 18px; height: 18px; stroke: var(--amber); fill: none; stroke-width: 2; }
+  .problem-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .problem-card p { font-size: 13px; color: var(--gray-muted); line-height: 1.6; }
+
+  /* HOW IT WORKS */
+  .how-bg { background: var(--gray-subtle); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; position: relative; }
+  .step { padding: 28px 24px; position: relative; }
+  .step-num { width: 32px; height: 32px; background: var(--green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-bottom: 16px; }
+  .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .step p { font-size: 13px; color: var(--gray-muted); line-height: 1.6; }
+  .step-arrow { position: absolute; right: -12px; top: 36px; font-size: 18px; color: var(--border); z-index: 1; }
+
+  /* FEATURES */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .feature-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; }
+  .feature-icon { width: 40px; height: 40px; background: var(--green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .feature-icon svg { width: 20px; height: 20px; stroke: var(--green); fill: none; stroke-width: 1.8; }
+  .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .feature-card p { font-size: 13px; color: var(--gray-muted); line-height: 1.6; }
+
+  /* APP MOCKUP */
+  .mockup-wrap { background: var(--green-light); border-radius: 16px; padding: 40px 32px; margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+  @media(max-width: 640px) { .mockup-wrap { grid-template-columns: 1fr; } }
+  .mockup-copy h3 { font-size: 22px; font-weight: 700; color: var(--green-dark); margin-bottom: 12px; }
+  .mockup-copy p { font-size: 14px; color: #0F6E56; line-height: 1.7; margin-bottom: 20px; }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .check-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--green-dark); }
+  .check-list li::before { content: ''; width: 16px; height: 16px; min-width: 16px; background: var(--green); border-radius: 50%; margin-top: 1px; display: flex; align-items: center; justify-content: center; background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; }
+  .app-card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+  .app-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .app-card-header h4 { font-size: 13px; font-weight: 600; color: var(--text); }
+  .app-tag { font-size: 11px; font-weight: 500; background: var(--green-light); color: var(--green-dark); padding: 3px 8px; border-radius: 20px; }
+  .drill-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .drill-row:last-child { border-bottom: none; }
+  .drill-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: #EF9F27; }
+  .dot-red { background: #E24B4A; }
+  .drill-info { flex: 1; }
+  .drill-info p { font-size: 13px; font-weight: 500; color: var(--text); }
+  .drill-info span { font-size: 11px; color: var(--gray-muted); }
+  .drill-score { font-size: 13px; font-weight: 600; color: var(--text); }
+  .progress-bar-wrap { margin-top: 14px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-muted); margin-bottom: 5px; }
+  .progress-bar { height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 10px; background: var(--green); }
+
+  /* TESTIMONIALS */
+  .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .tcard { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .stars { color: #EF9F27; font-size: 13px; letter-spacing: 2px; margin-bottom: 12px; }
+  .tcard p { font-size: 13px; color: var(--gray-muted); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+  .tcard-author { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--green-dark); }
+  .author-info strong { display: block; font-size: 13px; font-weight: 600; }
+  .author-info span { font-size: 11px; color: var(--gray-muted); }
+
+  /* PRICING */
+  .pricing-wrap { max-width: 1000px; margin: 0 auto; padding: 72px 32px 80px; }
+  .pricing-hero { text-align: center; margin-bottom: 48px; }
+  .pricing-hero h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; letter-spacing: -0.4px; margin-bottom: 14px; }
+  .pricing-hero p { font-size: 16px; color: var(--gray-muted); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
+  .toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 48px; }
+  .toggle-label { font-size: 14px; color: var(--gray-muted); }
+  .toggle-label.active { color: var(--text); font-weight: 500; }
+  .toggle { position: relative; width: 44px; height: 24px; background: var(--green); border-radius: 12px; cursor: pointer; border: none; outline: none; }
+  .toggle-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s; }
+  .toggle.annual .toggle-knob { transform: translateX(20px); }
+  .save-badge { background: var(--green-light); color: var(--green-text); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 56px; }
+  @media(max-width: 680px) { .plans { grid-template-columns: 1fr; } }
+  .plan-card { background: var(--white); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 28px 24px; display: flex; flex-direction: column; gap: 0; }
+  .plan-card.featured { border: 2px solid var(--green); }
+  .plan-badge { display: inline-block; background: var(--green-light); color: var(--green-text); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; align-self: flex-start; }
+  .plan-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .plan-desc { font-size: 13px; color: var(--gray-muted); margin-bottom: 20px; line-height: 1.5; }
+  .plan-price { margin-bottom: 6px; }
+  .plan-price .amount { font-size: 36px; font-weight: 700; letter-spacing: -1px; color: var(--text); }
+  .plan-price .period { font-size: 14px; color: var(--gray-muted); }
+  .plan-billed { font-size: 12px; color: var(--gray-muted); margin-bottom: 24px; min-height: 18px; }
+  .plan-btn { display: block; text-align: center; padding: 11px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; text-decoration: none; margin-bottom: 24px; cursor: pointer; border: none; }
+  .plan-btn.outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .plan-btn.outline:hover { background: var(--gray-subtle); }
+  .plan-btn.solid { background: var(--green); color: white; }
+  .plan-btn.solid:hover { background: var(--green-dark); }
+  .divider { height: 0.5px; background: var(--border); margin-bottom: 20px; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .feature-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text); line-height: 1.5; }
+  .check { width: 16px; height: 16px; min-width: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .check.yes { background: var(--green); }
+  .check.no { background: var(--border); }
+  .check svg { width: 9px; height: 9px; fill: none; stroke: white; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* COMPARE TABLE */
+  .compare-section { max-width: 1000px; margin: 0 auto; padding: 0 32px 64px; }
+  .compare-section .section-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--green); text-transform: uppercase; margin-bottom: 10px; }
+  .compare-section .section-title { font-size: clamp(20px, 3vw, 28px); font-weight: 700; margin-bottom: 32px; letter-spacing: -0.3px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 64px; }
+  .compare-table th { text-align: left; padding: 10px 12px; font-weight: 600; font-size: 12px; color: var(--gray-muted); border-bottom: 1px solid var(--border); }
+  .compare-table th:not(:first-child) { text-align: center; }
+  .compare-table td { padding: 12px 12px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+  .compare-table td:not(:first-child) { text-align: center; }
+  .compare-table tr:hover td { background: var(--gray-subtle); }
+  .compare-table .cat-row td { font-weight: 600; font-size: 12px; color: var(--gray-muted); background: var(--gray-subtle); padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .dot-check { width: 18px; height: 18px; background: var(--green); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+  .dot-check svg { width: 9px; height: 9px; fill: none; stroke: white; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .dot-dash { width: 18px; height: 18px; border-radius: 50%; background: var(--border); display: inline-flex; align-items: center; justify-content: center; }
+  .dot-dash svg { width: 8px; height: 2px; fill: none; stroke: #888; stroke-width: 2; stroke-linecap: round; }
+
+  /* FAQ */
+  .faq-section { max-width: 1000px; margin: 0 auto; padding: 0 32px 64px; }
+  .faq-section .section-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--green); text-transform: uppercase; margin-bottom: 10px; }
+  .faq-section .section-title { font-size: clamp(20px, 3vw, 28px); font-weight: 700; margin-bottom: 32px; letter-spacing: -0.3px; }
+  .faq { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  @media(max-width: 600px) { .faq { grid-template-columns: 1fr; } }
+  .faq-item { padding: 20px 0; border-bottom: 0.5px solid var(--border); }
+  .faq-item:nth-child(odd) { padding-right: 32px; }
+  .faq-item:nth-child(even) { padding-left: 32px; border-left: 0.5px solid var(--border); }
+  .faq-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .faq-item p { font-size: 13px; color: var(--gray-muted); line-height: 1.6; }
+
+  /* CTA */
+  .cta-section { background: var(--text); border-radius: 16px; margin: 0 40px 72px; padding: 60px 40px; text-align: center; }
+  .cta-section h2 { font-size: 32px; font-weight: 700; color: white; margin-bottom: 14px; }
+  .cta-section p { font-size: 16px; color: #B4B2A9; margin-bottom: 32px; }
+  .cta-section .btn-primary { font-size: 16px; padding: 14px 36px; }
+  .cta-note { font-size: 12px; color: #888780; margin-top: 14px; }
+
+  /* FOOTER */
+  footer { border-top: 0.5px solid var(--border); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer p { font-size: 13px; color: var(--gray-muted); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: var(--gray-muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="6" r="3.5"/>
+        <path d="M9 9.5v7" stroke-linecap="round"/>
+        <path d="M6 16.5h6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    FairwayIQ
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a class="btn-nav" href="#">Get started free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><span class="badge-dot"></span> AI-powered golf coaching</div>
+  <h1>Practice smarter.<br/>Shoot <span>lower scores</span>.</h1>
+  <p>FairwayIQ builds a personalized practice plan, tracks your progress, and tells you exactly what to work on next — so every range session counts.</p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="#">Start for free</a>
+    <a class="btn-secondary" href="#how-it-works">See how it works</a>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<div class="proof">
+  <div class="proof-inner">
+    <div class="proof-stat"><strong>4,200+</strong><span>Active golfers</span></div>
+    <div class="proof-div"></div>
+    <div class="proof-stat"><strong>2.4 strokes</strong><span>Avg. handicap improvement</span></div>
+    <div class="proof-div"></div>
+    <div class="proof-stat"><strong>18,000+</strong><span>Sessions logged</span></div>
+    <div class="proof-div"></div>
+    <div class="proof-stat"><strong>4.8 / 5</strong><span>User rating</span></div>
+  </div>
+</div>
+
+<!-- PROBLEM SECTION -->
+<section class="section">
+  <p class="section-label">The problem</p>
+  <h2 class="section-title">Most golfers practice hard.<br/>Very few practice smart.</h2>
+  <p class="section-sub">Without structure, feedback, or a clear plan, practice sessions don't translate to lower scores on the course.</p>
+  <div class="problems">
+    <div class="problem-card">
+      <div class="problem-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Unstructured sessions</h3>
+      <p>Most range visits turn into "hit balls until done" — no drills, no focus, no purpose.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>No feedback loop</h3>
+      <p>Without tracking, you can't see what's improving, what isn't, or what to prioritize next.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 10h8M8 14h5" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Lessons don't stick</h3>
+      <p>Expensive lessons come with notes that get lost — and the same mistakes repeat next session.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="how-bg" id="how-it-works">
+  <section class="section">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Three steps to better golf</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Set your goals</h3>
+        <p>Tell us your handicap, what you want to improve, and how often you practice.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Get your plan</h3>
+        <p>FairwayIQ builds a personalized drill plan tailored to your weaknesses and schedule.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Log & improve</h3>
+        <p>After each session, log results in seconds. The AI adapts your next plan automatically.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <p class="section-label">Features</p>
+  <h2 class="section-title">Everything you need to improve</h2>
+  <p class="section-sub">Built for real golfers who want real results — without hiring a full-time coach.</p>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Personalized practice plans</h3>
+      <p>AI-generated drill schedules based on your game data, goals, and available time each week.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Fast session logging</h3>
+      <p>Log a full practice session in under 60 seconds. Quick taps, no typing required.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg>
+      </div>
+      <h3>Progress tracking</h3>
+      <p>Visual dashboards show exactly what's improving and what needs more attention over time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Smart recommendations</h3>
+      <p>After each session, get prioritized suggestions on what to drill next based on your results.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      </div>
+      <h3>Lesson note capture</h3>
+      <p>Snap a photo of instructor notes and we'll turn them into drills in your practice plan.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Playing partners</h3>
+      <p>Invite friends to compare stats and keep each other accountable between sessions.</p>
+    </div>
+  </div>
+
+  <!-- MINI APP MOCKUP -->
+  <div class="mockup-wrap">
+    <div class="mockup-copy">
+      <h3>Your practice dashboard, always updated</h3>
+      <p>See your current plan, recent results, and next recommended drills — all in one place.</p>
+      <ul class="check-list">
+        <li>Drill results tracked per session</li>
+        <li>Weak areas flagged automatically</li>
+        <li>Next plan adapts to your progress</li>
+        <li>Works at the range or at home</li>
+      </ul>
+    </div>
+    <div class="app-card">
+      <div class="app-card-header">
+        <h4>Today's session — Short game</h4>
+        <span class="app-tag">3 drills</span>
+      </div>
+      <div class="drill-row">
+        <div class="drill-dot dot-green"></div>
+        <div class="drill-info"><p>50-yard pitch control</p><span>15 min · Wedge accuracy</span></div>
+        <div class="drill-score">8/10</div>
+      </div>
+      <div class="drill-row">
+        <div class="drill-dot dot-amber"></div>
+        <div class="drill-info"><p>Lag putting drill</p><span>10 min · Distance control</span></div>
+        <div class="drill-score">6/10</div>
+      </div>
+      <div class="drill-row">
+        <div class="drill-dot dot-red"></div>
+        <div class="drill-info"><p>Bunker escape (flat lie)</p><span>10 min · Sand game</span></div>
+        <div class="drill-score">4/10</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-label"><span>Weekly goal</span><span>3 / 5 sessions</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="how-bg">
+  <section class="section">
+    <p class="section-label">Testimonials</p>
+    <h2 class="section-title">Golfers who practice smarter</h2>
+    <div class="testimonials">
+      <div class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>"Dropped 4 strokes in 6 weeks. I finally know what to work on instead of just beating balls."</p>
+        <div class="tcard-author">
+          <div class="avatar">MK</div>
+          <div class="author-info"><strong>Mike K.</strong><span>14 → 10 handicap</span></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>"I take lessons once a month. FairwayIQ turns my instructor's notes into an actual plan I follow every week."</p>
+        <div class="tcard-author">
+          <div class="avatar">SR</div>
+          <div class="author-info"><strong>Sarah R.</strong><span>22 → 18 handicap</span></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>"Logging sessions takes 30 seconds. I actually do it now. The progress charts are honestly motivating."</p>
+        <div class="tcard-author">
+          <div class="avatar">JL</div>
+          <div class="author-info"><strong>James L.</strong><span>9 → 6 handicap</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-wrap">
+    <div class="pricing-hero">
+      <p class="section-label">Pricing</p>
+      <h2>Simple, honest pricing</h2>
+      <p>Start free, upgrade when you're ready. No hidden fees. Cancel anytime.</p>
+      <div class="toggle-wrap">
+        <span class="toggle-label active" id="lbl-monthly">Monthly</span>
+        <button class="toggle" id="billing-toggle" aria-label="Toggle billing">
+          <div class="toggle-knob"></div>
+        </button>
+        <span class="toggle-label" id="lbl-annual">Annual <span class="save-badge">Save 25%</span></span>
+      </div>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-desc">Get started with the basics. No credit card needed.</div>
+        <div class="plan-price"><span class="amount">$0</span><span class="period">/mo</span></div>
+        <div class="plan-billed">&nbsp;</div>
+        <a href="#" class="plan-btn outline">Get started free</a>
+        <div class="divider"></div>
+        <ul class="feature-list">
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>2 sessions per week</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>3 drills per session</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Basic progress tracking</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Drill library (50 drills)</li>
+          <li><span class="check no"><svg viewBox="0 0 8 2"><path d="M0 1h8"/></svg></span><span style="color:var(--gray-muted)">AI recommendations</span></li>
+          <li><span class="check no"><svg viewBox="0 0 8 2"><path d="M0 1h8"/></svg></span><span style="color:var(--gray-muted)">Lesson note capture</span></li>
+          <li><span class="check no"><svg viewBox="0 0 8 2"><path d="M0 1h8"/></svg></span><span style="color:var(--gray-muted)">Playing partners</span></li>
+        </ul>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">The full FairwayIQ experience. For golfers serious about improving.</div>
+        <div class="plan-price"><span class="amount" id="pro-price">$12</span><span class="period">/mo</span></div>
+        <div class="plan-billed" id="pro-billed">Billed monthly</div>
+        <a href="#" class="plan-btn solid">Start 14-day free trial</a>
+        <div class="divider"></div>
+        <ul class="feature-list">
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Unlimited sessions</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Unlimited drills</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Full progress dashboard</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Full drill library (300+)</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>AI-powered recommendations</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Lesson note capture</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Up to 3 playing partners</li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Coach</div>
+        <div class="plan-desc">For golf instructors managing multiple students and practice plans.</div>
+        <div class="plan-price"><span class="amount" id="coach-price">$39</span><span class="period">/mo</span></div>
+        <div class="plan-billed" id="coach-billed">Billed monthly</div>
+        <a href="#" class="plan-btn outline">Contact sales</a>
+        <div class="divider"></div>
+        <ul class="feature-list">
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Everything in Pro</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Up to 20 student accounts</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Student progress reports</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Custom drill creation</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Assign plans to students</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Priority support</li>
+          <li><span class="check yes"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1"/></svg></span>Branded reports</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARE TABLE -->
+  <div class="compare-section">
+    <div class="section-label">Compare plans</div>
+    <div class="section-title">Everything side by side</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:40%">Feature</th>
+          <th style="width:20%">Free</th>
+          <th style="width:20%;color:var(--green)">Pro</th>
+          <th style="width:20%">Coach</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="4">Practice sessions</td></tr>
+        <tr><td>Sessions per week</td><td>2</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Drills per session</td><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Drill library access</td><td>50 drills</td><td>300+ drills</td><td>300+ + custom</td></tr>
+        <tr class="cat-row"><td colspan="4">AI & recommendations</td></tr>
+        <tr>
+          <td>AI practice plans</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Next-session recommendations</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Lesson note capture</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+        </tr>
+        <tr class="cat-row"><td colspan="4">Tracking & social</td></tr>
+        <tr><td>Progress dashboard</td><td>Basic</td><td>Full</td><td>Full</td></tr>
+        <tr>
+          <td>Playing partners</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td>Up to 3</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr class="cat-row"><td colspan="4">Coach features</td></tr>
+        <tr>
+          <td>Student accounts</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td>Up to 20</td>
+        </tr>
+        <tr>
+          <td>Assign plans to students</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+        </tr>
+        <tr>
+          <td>Branded PDF reports</td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-dash"><svg viewBox="0 0 8 2"><path d="M0 1h8" stroke="#888" stroke-width="2" stroke-linecap="round"/></svg></span></td>
+          <td><span class="dot-check"><svg viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">Common questions</div>
+    <div class="faq">
+      <div class="faq-item">
+        <h4>Can I cancel anytime?</h4>
+        <p>Yes, absolutely. Cancel from your account settings with one click. No questions asked, no cancellation fees.</p>
+      </div>
+      <div class="faq-item">
+        <h4>What happens after my free trial?</h4>
+        <p>After 14 days, you'll be asked to choose a plan. If you don't upgrade, your account moves to the Free plan automatically.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Does the Coach plan include my own Pro access?</h4>
+        <p>Yes. Your coach account includes full Pro features for your own practice, plus tools to manage up to 20 students.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Can I import notes from my instructor?</h4>
+        <p>On Pro and Coach plans, you can photograph or upload notes and FairwayIQ will convert them into actionable drills automatically.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Is there a student discount?</h4>
+        <p>Yes — college golf team members get 40% off Pro. Reach out to our team with your .edu email to redeem.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Do you offer refunds?</h4>
+        <p>We offer a full refund within 7 days of your first charge if FairwayIQ isn't the right fit. Just contact support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="max-width: 960px; margin: 0 auto;">
+  <div class="cta-section">
+    <h2>Ready to actually improve?</h2>
+    <p>Join 4,200+ golfers who practice with a plan. First 14 days of Pro are on us.</p>
+    <a class="btn-primary" href="#" style="background: var(--green); font-size: 16px; padding: 14px 36px;">Start for free — no credit card</a>
+    <p class="cta-note">Already have an account? <a href="#" style="color:#9FE1CB">Sign in</a></p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p style="display:flex;align-items:center;gap:6px;">
+    <span style="font-weight:600;">FairwayIQ</span> · © 2026
+  </p>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+const toggle = document.getElementById('billing-toggle');
+const proPrice = document.getElementById('pro-price');
+const coachPrice = document.getElementById('coach-price');
+const proBilled = document.getElementById('pro-billed');
+const coachBilled = document.getElementById('coach-billed');
+const lblMonthly = document.getElementById('lbl-monthly');
+const lblAnnual = document.getElementById('lbl-annual');
+let annual = false;
+toggle.addEventListener('click', () => {
+  annual = !annual;
+  toggle.classList.toggle('annual', annual);
+  if (annual) {
+    proPrice.textContent = '$9';
+    coachPrice.textContent = '$29';
+    proBilled.textContent = 'Billed $108/year';
+    coachBilled.textContent = 'Billed $348/year';
+    lblMonthly.classList.remove('active');
+    lblAnnual.classList.add('active');
+  } else {
+    proPrice.textContent = '$12';
+    coachPrice.textContent = '$39';
+    proBilled.textContent = 'Billed monthly';
+    coachBilled.textContent = 'Billed monthly';
+    lblMonthly.classList.add('active');
+    lblAnnual.classList.remove('active');
+  }
+});
+</script>
+</body>
+</html>
