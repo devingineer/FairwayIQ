@@ -35,8 +35,6 @@ function ProtectedRoute({ children }) {
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
     })
