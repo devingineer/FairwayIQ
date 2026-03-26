@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
 export default function DashboardNav() {
@@ -45,6 +46,11 @@ export default function DashboardNav() {
       <nav className="dash-nav-links">
         <Link to="/dashboard" className={`dash-nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>Sessions</Link>
         <Link to="/community" className={`dash-nav-link ${location.pathname === '/community' ? 'active' : ''}`}>Community</Link>
+        <span className="logo-mark" />
+        FairwayIQ
+      </Link>
+      <nav className="dash-nav-links">
+        <span className="dash-nav-link active">Sessions</span>
       </nav>
       <div className="dash-nav-user" ref={menuRef}>
         <button className="dash-avatar" onClick={() => setOpen(o => !o)}>
