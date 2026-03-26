@@ -57,8 +57,6 @@ function getWeekStats(sessions) {
   }
 }
 
-import { supabase } from '../lib/supabase'
-
 export default function Dashboard() {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
