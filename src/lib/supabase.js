@@ -8,4 +8,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     flowType: 'pkce',
   },
 })
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
