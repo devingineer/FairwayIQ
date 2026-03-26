@@ -3,6 +3,60 @@ import DashboardNav from '../components/dashboard/DashboardNav'
 import MiniCalendar from '../components/dashboard/MiniCalendar'
 import SessionCard from '../components/dashboard/SessionCard'
 import LogSessionModal from '../components/dashboard/LogSessionModal'
+import StreakCard from '../components/dashboard/StreakCard'
+import GoalsCard from '../components/dashboard/GoalsCard'
+import { supabase } from '../lib/supabase'
+
+function calcStreak(sessions) {
+  if (!sessions.length) return { current: 0, best: 0 }
+
+  const days = [...new Set(sessions.map(s => {
+    const d = new Date(s.date)
+    d.setHours(0, 0, 0, 0)
+    return d.getTime()
+  }))].sort((a, b) => b - a).map(t => new Date(t))
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
+
+  let current = 0
+  if (days[0] >= yesterday) {
+    current = 1
+    for (let i = 1; i < days.length; i++) {
+      const diff = Math.round((days[i - 1] - days[i]) / 86400000)
+      if (diff === 1) current++
+      else break
+    }
+  }
+
+  let best = 1
+  let run = 1
+  for (let i = 1; i < days.length; i++) {
+    const diff = Math.round((days[i - 1] - days[i]) / 86400000)
+    if (diff === 1) { run++; if (run > best) best = run }
+    else run = 1
+  }
+  best = Math.max(best, current)
+
+  return { current, best }
+}
+
+function getWeekStats(sessions) {
+  const now = new Date()
+  const monday = new Date(now)
+  monday.setHours(0, 0, 0, 0)
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7))
+
+  const thisWeek = sessions.filter(s => new Date(s.date) >= monday)
+  return {
+    sessions: thisWeek.length,
+    balls: thisWeek.reduce((sum, s) => sum + s.balls, 0),
+    minutes: thisWeek.reduce((sum, s) => sum + s.duration, 0),
+  }
+}
+
 import { supabase } from '../lib/supabase'
 
 export default function Dashboard() {
@@ -46,6 +100,9 @@ export default function Dashboard() {
       })
     : sessions
 
+  const streak = calcStreak(sessions)
+  const weekStats = getWeekStats(sessions)
+
   return (
     <div className="dash-layout">
       <DashboardNav />
@@ -59,6 +116,14 @@ export default function Dashboard() {
             onDaySelect={d => setSelectedDate(prev =>
               prev && prev.toDateString() === d.toDateString() ? null : d
             )}
+          />
+
+          <StreakCard current={streak.current} best={streak.best} />
+
+          <GoalsCard
+            weekSessions={weekStats.sessions}
+            weekBalls={weekStats.balls}
+            weekMinutes={weekStats.minutes}
           />
 
           <div className="dash-stats">

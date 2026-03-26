@@ -11,6 +11,7 @@ import Pricing from './components/Pricing'
 import CTA from './components/CTA'
 import Footer from './components/Footer'
 import Dashboard from './pages/Dashboard'
+import Community from './pages/Community'
 import Login from './pages/Login'
 import { supabase } from './lib/supabase'
 
@@ -54,6 +55,7 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
     </Routes>
   )
 }

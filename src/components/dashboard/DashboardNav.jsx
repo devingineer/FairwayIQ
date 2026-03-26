@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
@@ -6,6 +7,7 @@ export default function DashboardNav() {
   const [user, setUser] = useState(null)
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -32,6 +34,18 @@ export default function DashboardNav() {
   return (
     <header className="dash-nav">
       <Link to="/" className="logo">
+        <span className="logo-mark">
+          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="6" r="3.5" />
+            <path d="M9 9.5v7" strokeLinecap="round" />
+            <path d="M6 16.5h6" strokeLinecap="round" />
+          </svg>
+        </span>
+        FairwayIQ
+      </Link>
+      <nav className="dash-nav-links">
+        <Link to="/dashboard" className={`dash-nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>Sessions</Link>
+        <Link to="/community" className={`dash-nav-link ${location.pathname === '/community' ? 'active' : ''}`}>Community</Link>
         <span className="logo-mark" />
         FairwayIQ
       </Link>
