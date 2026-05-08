@@ -1,3 +1,5 @@
+import Reveal from './Reveal'
+
 const steps = [
   {
     num: 1,
@@ -23,16 +25,20 @@ export default function HowItWorks() {
   return (
     <div className="how-bg" id="how-it-works">
       <section className="section">
-        <p className="section-label">How it works</p>
-        <h2 className="section-title">Three steps to better golf</h2>
+        <Reveal><p className="section-label">How it works</p></Reveal>
+        <Reveal delay={100}>
+          <h2 className="section-title">Three steps to better golf</h2>
+        </Reveal>
         <div className="steps">
-          {steps.map((step) => (
-            <div className="step" key={step.num}>
-              <div className="step-num">{step.num}</div>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
-              {step.arrow && <span className="step-arrow">→</span>}
-            </div>
+          {steps.map((step, i) => (
+            <Reveal key={step.num} delay={100 + i * 120}>
+              <div className="step">
+                <div className="step-num">{step.num}</div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+                {step.arrow && <span className="step-arrow">→</span>}
+              </div>
+            </Reveal>
           ))}
         </div>
       </section>

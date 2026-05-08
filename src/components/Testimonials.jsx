@@ -1,3 +1,5 @@
+import Reveal from './Reveal'
+
 const testimonials = [
   {
     quote: 'Dropped 4 strokes in 6 weeks. I finally know what to work on instead of just beating balls.',
@@ -23,21 +25,25 @@ export default function Testimonials() {
   return (
     <div className="how-bg">
       <section className="section">
-        <p className="section-label">Testimonials</p>
-        <h2 className="section-title">Golfers who practice smarter</h2>
+        <Reveal><p className="section-label">Testimonials</p></Reveal>
+        <Reveal delay={100}>
+          <h2 className="section-title">Golfers who practice smarter</h2>
+        </Reveal>
         <div className="testimonials">
-          {testimonials.map((t) => (
-            <div className="tcard" key={t.name}>
-              <div className="stars">★★★★★</div>
-              <p>"{t.quote}"</p>
-              <div className="tcard-author">
-                <div className="avatar">{t.initials}</div>
-                <div className="author-info">
-                  <strong>{t.name}</strong>
-                  <span>{t.result}</span>
+          {testimonials.map((t, i) => (
+            <Reveal key={t.name} delay={100 + i * 110}>
+              <div className="tcard">
+                <div className="stars">★★★★★</div>
+                <p>"{t.quote}"</p>
+                <div className="tcard-author">
+                  <div className="avatar">{t.initials}</div>
+                  <div className="author-info">
+                    <strong>{t.name}</strong>
+                    <span>{t.result}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

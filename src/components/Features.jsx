@@ -1,3 +1,5 @@
+import Reveal from './Reveal'
+
 const features = [
   {
     title: 'Personalized practice plans',
@@ -111,21 +113,29 @@ function AppMockup() {
 export default function Features() {
   return (
     <section className="section" id="features">
-      <p className="section-label">Features</p>
-      <h2 className="section-title">Everything you need to improve</h2>
-      <p className="section-sub">
-        Built for real golfers who want real results — without hiring a full-time coach.
-      </p>
+      <Reveal><p className="section-label">Features</p></Reveal>
+      <Reveal delay={100}>
+        <h2 className="section-title">Everything you need to improve</h2>
+      </Reveal>
+      <Reveal delay={180}>
+        <p className="section-sub">
+          Built for real golfers who want real results — without hiring a full-time coach.
+        </p>
+      </Reveal>
       <div className="features">
-        {features.map((f) => (
-          <div className="feature-card" key={f.title}>
-            <div className="feature-icon">{f.icon}</div>
-            <h3>{f.title}</h3>
-            <p>{f.desc}</p>
-          </div>
+        {features.map((f, i) => (
+          <Reveal key={f.title} delay={80 * i}>
+            <div className="feature-card">
+              <div className="feature-icon">{f.icon}</div>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
-      <AppMockup />
+      <Reveal delay={100}>
+        <AppMockup />
+      </Reveal>
     </section>
   )
 }

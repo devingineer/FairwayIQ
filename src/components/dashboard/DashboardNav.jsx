@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import ThemeToggle from '../ThemeToggle'
 
 export default function DashboardNav() {
   const [user, setUser] = useState(null)
@@ -46,6 +47,8 @@ export default function DashboardNav() {
         <Link to="/dashboard" className={`dash-nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>Sessions</Link>
         <Link to="/community" className={`dash-nav-link ${location.pathname === '/community' ? 'active' : ''}`}>Community</Link>
       </nav>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <ThemeToggle />
       <div className="dash-nav-user" ref={menuRef}>
         <button className="dash-avatar" onClick={() => setOpen(o => !o)}>
           {initials}
@@ -58,6 +61,7 @@ export default function DashboardNav() {
             </button>
           </div>
         )}
+      </div>
       </div>
     </header>
   )

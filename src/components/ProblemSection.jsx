@@ -1,3 +1,5 @@
+import Reveal from './Reveal'
+
 const problems = [
   {
     title: 'Unstructured sessions',
@@ -33,21 +35,27 @@ const problems = [
 export default function ProblemSection() {
   return (
     <section className="section">
-      <p className="section-label">The problem</p>
-      <h2 className="section-title">
-        Most golfers practice hard.<br />Very few practice smart.
-      </h2>
-      <p className="section-sub">
-        Without structure, feedback, or a clear plan, practice sessions don't translate
-        to lower scores on the course.
-      </p>
+      <Reveal><p className="section-label">The problem</p></Reveal>
+      <Reveal delay={100}>
+        <h2 className="section-title">
+          Most golfers practice hard.<br />Very few practice smart.
+        </h2>
+      </Reveal>
+      <Reveal delay={180}>
+        <p className="section-sub">
+          Without structure, feedback, or a clear plan, practice sessions don't translate
+          to lower scores on the course.
+        </p>
+      </Reveal>
       <div className="problems">
-        {problems.map((p) => (
-          <div className="problem-card" key={p.title}>
-            <div className="problem-icon">{p.icon}</div>
-            <h3>{p.title}</h3>
-            <p>{p.desc}</p>
-          </div>
+        {problems.map((p, i) => (
+          <Reveal key={p.title} delay={100 + i * 100}>
+            <div className="problem-card">
+              <div className="problem-icon">{p.icon}</div>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>

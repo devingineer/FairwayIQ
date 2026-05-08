@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import ThemeToggle from './ThemeToggle'
 
 export default function Nav() {
   return (
@@ -15,9 +16,10 @@ export default function Nav() {
         FairwayIQ
       </a>
       <div className="nav-links">
-        <a href="#features">Features</a>
         <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
+        <ThemeToggle />
         <Link className="btn-nav" to="/login">Log in / Sign up</Link>
       </div>
     </nav>
