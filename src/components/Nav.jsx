@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function Nav() {
   return (
+    <div className="nav-wrap">
     <nav>
       <a className="logo" href="#">
         <div className="logo-mark">
@@ -20,5 +21,6 @@ export default function Nav() {
         <Link className="btn-nav" to="/login">Log in / Sign up</Link>
       </div>
     </nav>
+    </div>
   )
 }

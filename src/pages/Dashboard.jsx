@@ -5,6 +5,9 @@ import SessionCard from '../components/dashboard/SessionCard'
 import LogSessionModal from '../components/dashboard/LogSessionModal'
 import StreakCard from '../components/dashboard/StreakCard'
 import GoalsCard from '../components/dashboard/GoalsCard'
+import OnboardingModal from '../components/dashboard/OnboardingModal'
+import Toast from '../components/Toast'
+import ChatWidget from '../components/dashboard/ChatWidget'
 import { supabase } from '../lib/supabase'
 
 function calcStreak(sessions) {
@@ -62,6 +65,32 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
+  const [user, setUser] = useState(null)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [toast, setToast] = useState(null)
+
+  useEffect(() => {
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+
+      if (!user?.user_metadata?.onboarded) {
+        setShowOnboarding(true)
+      } else if (!sessionStorage.getItem('welcomed')) {
+        const firstName = user.user_metadata?.full_name?.split(' ')[0] ?? 'back'
+        setToast(`Welcome back, ${firstName}!`)
+        sessionStorage.setItem('welcomed', '1')
+      }
+    }
+    init()
+  }, [])
+
+  function handleOnboardingDone() {
+    setShowOnboarding(false)
+    const firstName = user?.user_metadata?.full_name?.split(' ')[0] ?? 'there'
+    setToast(`Welcome to FairwayIQ, ${firstName}!`)
+    sessionStorage.setItem('welcomed', '1')
+  }
 
   useEffect(() => {
     async function fetchSessions() {
@@ -177,6 +206,12 @@ export default function Dashboard() {
       {showModal && (
         <LogSessionModal onClose={() => setShowModal(false)} onSave={handleSave} />
       )}
+
+      {showOnboarding && <OnboardingModal onDone={handleOnboardingDone} />}
+
+      {toast && <Toast message={toast} onDone={() => setToast(null)} />}
+
+      <ChatWidget sessions={sessions} />
     </div>
   )
 }

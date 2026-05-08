@@ -1,6 +1,8 @@
 export default function Hero() {
   return (
     <section className="hero">
+      <div className="hero-blob hero-blob-1" />
+      <div className="hero-blob hero-blob-2" />
       <div className="badge">
         <span className="badge-dot" />
         AI-powered golf coaching
